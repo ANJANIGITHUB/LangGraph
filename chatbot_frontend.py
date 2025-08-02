@@ -10,7 +10,7 @@ st.sidebar.title("User Details")
 st.sidebar.markdown("**Build by:** Anjani Kumar")
 st.sidebar.markdown("**Domain:** ML, Deep Learning , NLP & GenAI Expert ")
 st.sidebar.markdown("**Location:** Bangalore, India")
-st.sidebar.markdown("**Tech Stacks:** \n\n OpenAI GPT Models,LangGraph")
+st.sidebar.markdown("**Tech Stacks:** \n\n OpenAI GPT Models,LangGraph,Streamlit")
 
 # Sidebar section
 with st.sidebar:
@@ -63,4 +63,5 @@ if user_input:
     st.session_state['message_history'].append({'role':'assistant','content':ai_message})
     with st.chat_message('assistant'):
         st.text(ai_message)
+
 
