@@ -45,9 +45,6 @@ graph.add_edge("chat_node",END)
 #Compile graph
 chatbot=graph.compile(checkpointer=checkpointer)
 
-
-
-
 # #Test by invoking
 # #thread_id='1'
 # config={'configurable':{'thread_id':'thread_id-2'}}
@@ -56,8 +53,16 @@ chatbot=graph.compile(checkpointer=checkpointer)
 
 # print(result)
 
+
 def retrieve_all_threads():
-    all_threads=set()
+    thread_latest_ts = {}
     for checkpoint in checkpointer.list(None):
-        all_threads.add(checkpoint.config['configurable']['thread_id'])
-    return list(all_threads)
+        tid = str(checkpoint.config['configurable']['thread_id'])
+        ts = getattr(checkpoint, "ts", None)  # or checkpoint["ts"] if dict
+        if tid not in thread_latest_ts or (ts and ts > thread_latest_ts[tid]):
+            thread_latest_ts[tid] = ts
+
+    # Sort threads by timestamp (latest first)
+    sorted_threads = sorted(thread_latest_ts.keys(), key=lambda t: thread_latest_ts[t] or 0, reverse=False)
+    return sorted_threads
+
