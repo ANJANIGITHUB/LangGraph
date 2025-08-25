@@ -18,7 +18,7 @@ from datetime import datetime
 from langchain_community.document_loaders import WeatherDataLoader
 
 #activate environment
-load_dotenv()
+#load_dotenv()
 
 #llm call
 llm=ChatOpenAI()
@@ -143,3 +143,4 @@ def retrieve_all_threads():
     # Sort threads by timestamp (latest first)
     sorted_threads = sorted(thread_latest_ts.keys(), key=lambda t: thread_latest_ts[t] or 0, reverse=False)
     return sorted_threads
+
