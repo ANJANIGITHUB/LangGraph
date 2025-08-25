@@ -1,6 +1,6 @@
 import streamlit as st
-from chatbot_database_backend import chatbot,retrieve_all_threads
-from langchain_core.messages import HumanMessage
+from chatbot_tools_backend import chatbot,retrieve_all_threads
+from langchain_core.messages import HumanMessage,AIMessage
 from openai import AuthenticationError
 import uuid
 
@@ -146,17 +146,44 @@ if user_input:
     with st.chat_message('user'):
         st.text(user_input)
 
+    # if user_api_key:
+    #     try:
+    #         # Stream the assistant's reply
+    #         with st.chat_message('assistant'):
+    #             ai_message = st.write_stream(
+    #                 message_chunk.content for message_chunk, metadata in chatbot.stream(
+    #                     {'api_key': user_api_key, 'messages': [HumanMessage(content=user_input)]},
+    #                     config=CONFIG,
+    #                     stream_mode='messages'
+    #                 )
+    #             )
+
+    #         # Append once
+    #         st.session_state['message_history'].append({'role': 'user', 'content': user_input})
+    #         st.session_state['message_history'].append({'role': 'assistant', 'content': ai_message})
+
+    #     except AuthenticationError:
+    #         st.error("❌ Invalid API key. Please re-check it.")
+    #         st.stop()
+    # else:
+    #     st.warning("Please enter your API key.")
+
     if user_api_key:
         try:
             # Stream the assistant's reply
             with st.chat_message('assistant'):
-                ai_message = st.write_stream(
-                    message_chunk.content for message_chunk, metadata in chatbot.stream(
-                        {'api_key': user_api_key, 'messages': [HumanMessage(content=user_input)]},
-                        config=CONFIG,
-                        stream_mode='messages'
-                    )
-                )
+                def ai_only_stream():
+                    for message_chunk, metadata in chatbot.stream(
+                        {'api_key': user_api_key, 
+                         'messages': [HumanMessage(content=user_input)]},
+                          config=CONFIG,
+                          stream_mode='messages'
+                     ):
+                        if isinstance(message_chunk,AIMessage):
+                            yield message_chunk.content
+                
+                ai_message=st.write_stream(ai_only_stream())
+                
 
             # Append once
             st.session_state['message_history'].append({'role': 'user', 'content': user_input})
