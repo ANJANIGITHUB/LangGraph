@@ -14,8 +14,8 @@ from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_community.utilities import OpenWeatherMapAPIWrapper
 import os
 from langchain_tavily import TavilySearch
-
-
+from datetime import datetime
+from langchain_community.document_loaders import WeatherDataLoader
 
 #activate environment
 load_dotenv()
@@ -41,6 +41,15 @@ search_tool = TavilySearch(
     # exclude_domains=None
 )
 
+@tool
+def get_date_time() ->datetime:
+    """ This function returns current date and time"""
+    now=datetime.now()
+    current_date = now.strftime("%Y-%m-%d")
+    current_time=now.strftime("%H:%M:%S")
+
+    return current_date ,current_time
+
 #tool 2 duckduckgo
 @tool
 def calculater(input1 : float ,input2 : float ,operation : str) -> dict:
@@ -64,6 +73,7 @@ def calculater(input1 : float ,input2 : float ,operation : str) -> dict:
         return {"error": str(e)}
     
 #tool 3 ,search of stocks prices
+@tool
 def get_stock_price(symbol : str)->dict:
         """
           Fetch latest stock price for a given symbol (e.g. 'AAPL', 'TSLA') 
@@ -75,18 +85,19 @@ def get_stock_price(symbol : str)->dict:
         return r.json()
 
 #tool 4 ,weather api
-os.environ["OPENWEATHERMAP_API_KEY"] = "d978e7e49ac217427988016bee132d4b"
+#os.environ["OPENWEATHERMAP_API_KEY"] = "d978e7e49ac217427988016bee132d4b"
 weather= OpenWeatherMapAPIWrapper()
 
 # 2. Wrap it as a Tool
 weather_tool = Tool(
     name="Weather",
     func=weather.run,
-    description="Get the current weather for a city in the world"
+    description="Get the current weather for a city of the given location"
 )
 
+
 #bind tools
-tools_list=[search_tool,calculater,get_stock_price,weather_tool]
+tools_list=[search_tool,calculater,get_stock_price,weather_tool,get_date_time]
 #llm_with_tools=llm.bind_tools(tools_list)
 
 #create class ChatState
