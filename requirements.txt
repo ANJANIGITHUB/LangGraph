@@ -5,3 +5,9 @@ dotenv
 streamlit
 openai
 langgraph-checkpoint-sqlite
+posthog
+langchain-tavily
+pyowm
+setuptools
+duckduckgo-search
+langchain-community 
