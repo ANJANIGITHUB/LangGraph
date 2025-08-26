@@ -55,9 +55,9 @@ st.markdown(" ")
 
 st.sidebar.markdown("""
 <span style='color:#5D8AA8'><strong>Built by:</strong> Anjani Kumar</span>  \n
-<span style='color:#A3C1AD'><strong>Domain:</strong> ML, DL, NLP, GenAI</span>  \n
+<span style='color:#A3C1AD'><strong>Domain:</strong> ML, DL, NLP, GenAI & LLMs</span>  \n
 <span style='color:#F4A7B9'><strong>Location:</strong> Bangalore, India</span>  \n
-<span style='color:#FFD580'><strong>Stack:</strong> OpenAI GPT, LangGraph</span>
+<span style='color:#FFD580'><strong>Stack:</strong> OpenAI GPT,LangChain,LangGraph,SQLLiteDB & Tools</span>
 """, unsafe_allow_html=True)
 
 # Sidebar section
@@ -217,5 +217,6 @@ if user_input:
             st.stop()
     else:
         st.warning("Please enter your API key.")
+
 
 
